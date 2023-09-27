@@ -10,11 +10,15 @@ enum WebServerStatus {processingRequest, readyForRequest};
 class WebServer {
     public:
        WebServer();
-       void processRequest(Request request);
+       void setCompletionTime(int time, Request* requestObj);
+       int getCompletionTime();
+       Request* getCurrentRequest();
        WebServerStatus getWebServerStatus();
 
     private:
         WebServerStatus status;
+        Request* currentRequest;
+        int completionTime;
 };
 
 #endif
