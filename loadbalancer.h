@@ -9,10 +9,13 @@ using namespace std;
 class LoadBalancer {
     public:
         LoadBalancer();
-    private:
+        void incrementTime(int time);
+        void queueWebServer(WebServer* webServer);
+        void sendRequest(WebServer* webServer, Request* requestObj);
         int currentTime;
-        queue<Request> requestQ;
-        queue<WebServer> serverQ;
+        queue<Request*> requests;
+        queue<WebServer*> activeServers;
+        queue<WebServer*> idleServers; 
 };
 
 #endif
