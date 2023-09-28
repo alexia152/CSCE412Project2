@@ -7,6 +7,9 @@ using namespace std;
 
 int main()
 {
+    ofstream myfile;
+    myfile.open("log.txt");
+
     int numServers, numTime;
 
     // handle user input
@@ -46,7 +49,7 @@ int main()
             WebServer *webServer = loadBalancer->activeServers.front();
             loadBalancer->activeServers.pop();
 
-            cout << "Finished request with IP In: " << webServer->getCurrentRequest()->getIPIn() << " in Server: " << webServer->getServerID() << endl;
+            myfile << "Finished request with IP In: " << webServer->getCurrentRequest()->getIPIn() << " in Server: " << webServer->getServerID() << endl;
 
             // delete the request and put the server into the idle queue
             delete webServer->getCurrentRequest();
@@ -69,28 +72,28 @@ int main()
             // add this server to the list of active servers
             loadBalancer->activeServers.push(webServer);
 
-            // cout << "Processing request: " << requestObj->getIPIn() << endl;
+            // myfile << "Processing request: " << requestObj->getIPIn() << endl;
         }
 
         // generate new requests at 30% chance
         int val = rand() % 100;
-        // cout << "val: " << val << endl;
+        // myfile << "val: " << val << endl;
         if (val <= 30)
         {
             Request *requestObj = new Request();
             loadBalancer->requests.push(requestObj);
-            cout << "New request generated with IP In: " << requestObj->getIPIn() << endl;
+            myfile << "New request generated with IP In: " << requestObj->getIPIn() << endl;
         }
 
         // logic to add and remove webservers as needed
         // if we are at 80% capacity, add another server
-        //if we are below 30% capacity, remove another server
+        // if we are below 30% capacity, remove another server
         double queueFillPercentage = (double)loadBalancer->requests.size() / loadBalancer->requestCapacity;
         if (queueFillPercentage > 0.8)
         {
             WebServer *webServer = new WebServer();
             loadBalancer->idleServers.push(webServer);
-            cout << "Added Server: " << webServer->getServerID() << endl;
+            myfile << "Added Server: " << webServer->getServerID() << endl;
         }
         else if (queueFillPercentage < 0.3)
         {
@@ -98,7 +101,7 @@ int main()
             {
                 WebServer *webServer = loadBalancer->idleServers.front();
                 loadBalancer->idleServers.pop();
-                cout << "Removed Server: " << webServer->getServerID() << endl;
+                myfile << "Removed Server: " << webServer->getServerID() << endl;
                 delete webServer;
             }
         }
@@ -106,5 +109,7 @@ int main()
         // increment cycle time
         loadBalancer->currentTime++;
     }
+
+    myfile.close();
     return 0;
 }
