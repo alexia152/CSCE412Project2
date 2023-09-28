@@ -71,6 +71,16 @@ int main()
             // cout << "Processing request: " << requestObj->getIPIn() << endl;
         }
 
+        // generate new requests at 30% chance
+        int val = rand() % 100;
+        // cout << "val: " << val << endl;
+        if (val <= 30)
+        {
+            Request *requestObj = new Request();
+            loadBalancer->requests.push(requestObj);
+            // cout << "new request generated" << endl;
+        }
+
         // increment cycle time
         loadBalancer->currentTime++;
     }
