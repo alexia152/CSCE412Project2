@@ -27,8 +27,9 @@ int main()
         loadBalancer->idleServers.push(webServer);
     }
 
+    loadBalancer->requestCapacity = 5 * numServers;
     // generate full queue
-    for (int k = 0; k < numServers * 5; k++)
+    for (int k = 0; k < loadBalancer->requestCapacity; k++)
     {
         Request *newRequest = new Request();
         loadBalancer->requests.push(newRequest);
@@ -45,7 +46,7 @@ int main()
             WebServer *webServer = loadBalancer->activeServers.front();
             loadBalancer->activeServers.pop();
 
-            // cout << "Finished request: " << webServer->getCurrentRequest()->getIPIn() << endl;
+            cout << "Finished request with IP In: " << webServer->getCurrentRequest()->getIPIn() << " in Server: " << webServer->getServerID() << endl;
 
             // delete the request and put the server into the idle queue
             delete webServer->getCurrentRequest();
@@ -78,7 +79,28 @@ int main()
         {
             Request *requestObj = new Request();
             loadBalancer->requests.push(requestObj);
-            // cout << "new request generated" << endl;
+            cout << "New request generated with IP In: " << requestObj->getIPIn() << endl;
+        }
+
+        // logic to add and remove webservers as needed
+        // if we are at 80% capacity, add another server
+        //if we are below 30% capacity, remove another server
+        double queueFillPercentage = (double)loadBalancer->requests.size() / loadBalancer->requestCapacity;
+        if (queueFillPercentage > 0.8)
+        {
+            WebServer *webServer = new WebServer();
+            loadBalancer->idleServers.push(webServer);
+            cout << "Added Server: " << webServer->getServerID() << endl;
+        }
+        else if (queueFillPercentage < 0.3)
+        {
+            if (!loadBalancer->idleServers.empty())
+            {
+                WebServer *webServer = loadBalancer->idleServers.front();
+                loadBalancer->idleServers.pop();
+                cout << "Removed Server: " << webServer->getServerID() << endl;
+                delete webServer;
+            }
         }
 
         // increment cycle time

@@ -13,6 +13,7 @@ class LoadBalancer {
         void queueWebServer(WebServer* webServer);
         void sendRequest(WebServer* webServer, Request* requestObj);
         int currentTime;
+        int requestCapacity;
         queue<Request*> requests;
         queue<WebServer*> activeServers;
         queue<WebServer*> idleServers; 

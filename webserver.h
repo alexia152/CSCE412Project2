@@ -14,11 +14,13 @@ class WebServer {
        int getCompletionTime();
        Request* getCurrentRequest();
        WebServerStatus getWebServerStatus();
+       int getServerID();
 
     private:
         WebServerStatus status;
         Request* currentRequest;
         int completionTime;
+        int serverID;
 };
 
 #endif
