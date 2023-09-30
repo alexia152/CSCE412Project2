@@ -14,6 +14,9 @@ class LoadBalancer {
         void sendRequest(WebServer* webServer, Request* requestObj);
         int currentTime;
         int requestCapacity;
+        int serversAdded;
+        int serversDeleted;
+        int requestsProcessed;
         queue<Request*> requests;
         queue<WebServer*> activeServers;
         queue<WebServer*> idleServers; 

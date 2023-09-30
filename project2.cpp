@@ -41,8 +41,7 @@ int main()
     // while we have not finished running time
     while (loadBalancer->currentTime <= numTime)
     {
-        // i need to look at our active webservers and remove them from the queue and
-        // put their servers back to idle as needed
+        //look at active webservers and remove them from the queue and put their servers back to idle as needed
         while (!loadBalancer->activeServers.empty() && loadBalancer->activeServers.front()->getCompletionTime() < loadBalancer->currentTime)
         {
             // get the next webserver
@@ -50,6 +49,7 @@ int main()
             loadBalancer->activeServers.pop();
 
             myfile << "Finished request with IP In: " << webServer->getCurrentRequest()->getIPIn() << " in Server: " << webServer->getServerID() << endl;
+            loadBalancer->requestsProcessed++;
 
             // delete the request and put the server into the idle queue
             delete webServer->getCurrentRequest();
@@ -71,13 +71,10 @@ int main()
 
             // add this server to the list of active servers
             loadBalancer->activeServers.push(webServer);
-
-            // myfile << "Processing request: " << requestObj->getIPIn() << endl;
         }
 
         // generate new requests at 30% chance
         int val = rand() % 100;
-        // myfile << "val: " << val << endl;
         if (val <= 30)
         {
             Request *requestObj = new Request();
@@ -94,6 +91,7 @@ int main()
             WebServer *webServer = new WebServer();
             loadBalancer->idleServers.push(webServer);
             myfile << "Added Server: " << webServer->getServerID() << endl;
+            loadBalancer->serversAdded++;
         }
         else if (queueFillPercentage < 0.3)
         {
@@ -102,6 +100,8 @@ int main()
                 WebServer *webServer = loadBalancer->idleServers.front();
                 loadBalancer->idleServers.pop();
                 myfile << "Removed Server: " << webServer->getServerID() << endl;
+                loadBalancer->serversDeleted++;
+
                 delete webServer;
             }
         }
@@ -109,6 +109,13 @@ int main()
         // increment cycle time
         loadBalancer->currentTime++;
     }
+
+    myfile << endl << endl;
+    myfile << "Requests processed: " << loadBalancer->requestsProcessed << endl;
+    myfile << "Servers added: " << loadBalancer->serversAdded << endl;
+    myfile << "Servers deleted: " << loadBalancer->serversDeleted << endl;
+    myfile << "Maximum webservers at a time: " << WebServer::currentID << endl;
+    
 
     myfile.close();
     return 0;
