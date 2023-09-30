@@ -7,6 +7,9 @@ using namespace std;
 
 LoadBalancer::LoadBalancer() {
     this->currentTime = 0;
+    this->serversAdded = 0;
+    this->serversDeleted = 0;
+    this->requestsProcessed = 0;
 }
 
 void LoadBalancer::queueWebServer(WebServer* webServer) {
