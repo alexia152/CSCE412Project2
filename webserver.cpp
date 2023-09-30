@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#include "webserver.h" //change to header file?
+#include "webserver.h"
 #include "request.h"
 
 using namespace std;
@@ -34,8 +34,9 @@ int WebServer::getServerID()
 {
     return this->serverID;
 }
+
 WebServerStatus WebServer::getWebServerStatus()
-{ // how to request another? needs to communicate w load balancer?
+{ 
     return this->status;
 }
 
@@ -44,10 +45,11 @@ Request *WebServer::getCurrentRequest()
     return this->currentRequest;
 }
 
-WebServer::~WebServer() {
+WebServer::~WebServer()
+{
     serverIDs.push(this->getServerID());
-   // delete this;
 }
 
 int WebServer::currentID = 0;
+
 queue<int> WebServer::serverIDs = queue<int>();

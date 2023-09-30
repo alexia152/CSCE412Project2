@@ -5,6 +5,15 @@
 
 using namespace std;
 
+/**
+ * @brief The main function for the load balancer simulation.
+ *
+ * This function simulates the operation of a load balancer, including creating web servers,
+ * processing requests, and managing server capacity.
+ *
+ * @return 0 on successful execution.
+ */
+
 int main()
 {
     ofstream myfile;
