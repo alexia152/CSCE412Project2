@@ -120,6 +120,9 @@ int main()
     }
 
     myfile << endl << endl;
+    myfile << "Starting queue size: " << loadBalancer->requestCapacity << endl;
+    myfile << "Ending queue size: " << loadBalancer->requests.size() << endl;
+    myfile << "Request processing time range: 3 - 50 clock cycles" << endl;
     myfile << "Requests processed: " << loadBalancer->requestsProcessed << endl;
     myfile << "Servers added: " << loadBalancer->serversAdded << endl;
     myfile << "Servers deleted: " << loadBalancer->serversDeleted << endl;
