@@ -6302,6 +6302,9 @@ New request generated with IP In: 506.572.649
 New request generated with IP In: 631.354.475
 
 
+Starting queue size: 50
+Ending queue size: 16
+Request processing time range: 3 - 50 clock cycles
 Requests processed: 3093
 Servers added: 70
 Servers deleted: 66
